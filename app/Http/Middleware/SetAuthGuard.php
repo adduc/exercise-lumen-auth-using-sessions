@@ -7,7 +7,7 @@ use Illuminate\Contracts\Auth\Factory as Auth;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class Authenticate
+class SetAuthGuard
 {
     public function __construct(protected Auth $auth)
     {
@@ -15,12 +15,7 @@ class Authenticate
 
     public function handle(Request $request, Closure $next, ?string $guard = null): Response
     {
-        if ($this->auth->guard($guard)->guest()) {
-            return match ($guard) {
-                'session' => redirect('/session/login'),
-                default => response('Unauthorized.', 401),
-            };
-        }
+        $this->auth->shouldUse($guard);
 
         return $next($request);
     }

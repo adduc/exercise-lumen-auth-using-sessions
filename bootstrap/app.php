@@ -25,7 +25,7 @@ $app = new Laravel\Lumen\Application(
 
 // $app->withFacades();
 
-// $app->withEloquent();
+$app->withEloquent();
 
 /*
 |--------------------------------------------------------------------------
@@ -76,9 +76,11 @@ $app->configure('app');
 //     App\Http\Middleware\ExampleMiddleware::class
 // ]);
 
-// $app->routeMiddleware([
-//     'auth' => App\Http\Middleware\Authenticate::class,
-// ]);
+$app->routeMiddleware([
+    'auth' => App\Http\Middleware\Authenticate::class,
+    'session' => \Illuminate\Session\Middleware\StartSession::class,
+    'auth-guard' => App\Http\Middleware\SetAuthGuard::class,
+]);
 
 /*
 |--------------------------------------------------------------------------
@@ -90,7 +92,8 @@ $app->configure('app');
 | totally optional, so you are not required to uncomment this line.
 |
 */
-
+$app->register(App\Providers\SessionServiceProvider::class);
+$app->register(\Illuminate\Cookie\CookieServiceProvider::class);
 // $app->register(App\Providers\AppServiceProvider::class);
 // $app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
